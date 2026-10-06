@@ -1,79 +1,59 @@
 
 	package pages;
 
-	import java.time.Duration;
+import java.time.Duration;
 
-	import org.openqa.selenium.By;
-	import org.openqa.selenium.JavascriptExecutor;
-	import org.openqa.selenium.WebDriver;
-	import org.openqa.selenium.WebElement;
-	import org.openqa.selenium.support.ui.ExpectedConditions;
-	import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
-	public class HomePage {
+public class HomePage {
 
-	    private WebDriver driver;
-	    private WebDriverWait wait;
+    WebDriver driver;
+    WebDriverWait wait;
 
-	    public HomePage(WebDriver driver) {
-	        this.driver = driver;
-	        this.wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-	    }
+    public HomePage(WebDriver driver) {
+        this.driver = driver;
+        wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+    }
 
-	    // Login button
-	    private By loginButton = By.xpath(
-	        "//*[normalize-space()='Log In' or normalize-space()='Login']"
-	    );
+    private By searchButton =
+            By.cssSelector("[aria-label*='Search'], [title*='Search']");
 
-	    // My Space - based on the HTML you provided
-	    private By mySpace = By.xpath(
-	        "//p[normalize-space()='My Space']"
-	    );
+    private By mySpace =
+            By.xpath("//*[normalize-space()='My Space']");
 
-	    // Premium
-	    private By premium = By.xpath(
-	        "//*[normalize-space()='Premium']"
-	    );
+    private By loginButton =
+            By.xpath("//*[normalize-space()='Log In']");
 
-	    public void clickLogin() {
+    public boolean isHomePageOpened() {
 
-	        WebElement element = wait.until(
-	            ExpectedConditions.visibilityOfElementLocated(loginButton)
-	        );
+        return driver.getCurrentUrl().contains("hotstar");
+    }
 
-	        clickUsingJS(element);
-	    }
+    public boolean isLoginDisplayed() {
 
-	    public void clickMySpace() {
+        try {
+            return wait.until(
+                    ExpectedConditions.visibilityOfElementLocated(loginButton))
+                    .isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
-	        WebElement element = wait.until(
-	            ExpectedConditions.visibilityOfElementLocated(mySpace)
-	        );
+    public void clickSearch() {
 
-	        clickUsingJS(element);
-	    }
+        wait.until(
+                ExpectedConditions.elementToBeClickable(searchButton))
+                .click();
+    }
 
-	    public void selectPremium() {
+    public void clickMySpace() {
 
-	        WebElement element = wait.until(
-	            ExpectedConditions.visibilityOfElementLocated(premium)
-	        );
-
-	        clickUsingJS(element);
-	    }
-
-	    private void clickUsingJS(WebElement element) {
-
-	        ((JavascriptExecutor) driver).executeScript(
-	            "arguments[0].scrollIntoView({block:'center'});",
-	            element
-	        );
-
-	        ((JavascriptExecutor) driver).executeScript(
-	            "arguments[0].click();",
-	            element
-	        );
-	    }
-	}
-
-
+        wait.until(
+                ExpectedConditions.elementToBeClickable(mySpace))
+                .click();
+    }
+}

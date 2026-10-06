@@ -1,21 +1,59 @@
-Feature: Hotstar Watchlist
+Feature: Hotstar Watchlist Functionality
 
-  Scenario: Add a movie to watchlist
+  Background:
+    Given user opens Hotstar application
 
-    Given I am on the Hotstar home page
-    When I search for "Pushpa"
-    And I select a movie from the search results
-    And I click the Add to Watchlist button
-    Then the movie should be added to my watchlist
+  @watchlist
+  Scenario: TC11 Verify watchlist option
+    Then watchlist option should be displayed
 
-  Scenario: Open My Space
+  @watchlist
+  Scenario: TC12 Add movie to watchlist
+    When user searches for movie "Kantara"
+    And user adds the movie to watchlist
+    Then movie should be added to watchlist
 
-    Given I am on the Hotstar home page
-    When I click My Space
-    Then My Space page should be displayed
+  @watchlist
+  Scenario: TC13 Add another movie to watchlist
+    When user searches for movie "Jailer"
+    And user adds the movie to watchlist
+    Then movie should be added to watchlist
 
-  Scenario: Verify watchlist movie
+  @watchlist
+  Scenario: TC14 Open watchlist
+    When user opens watchlist
+    Then watchlist page should be displayed
 
-    Given I have added a movie to my watchlist
-    When I open My Space
-    Then the movie should be displayed in my watchlist
+  @watchlist
+  Scenario: TC15 Verify movie in watchlist
+    When user opens watchlist
+    Then selected movie should be displayed
+
+  @watchlist
+  Scenario: TC16 Add multiple movies
+    When user searches for movie "Kantara"
+    And user adds the movie to watchlist
+    And user searches for movie "Jailer"
+    And user adds the movie to watchlist
+    Then movies should be added to watchlist
+
+  @watchlist
+  Scenario: TC17 Verify watchlist after refresh
+    When user opens watchlist
+    And user refreshes the page
+    Then watchlist page should be displayed
+
+  @watchlist
+  Scenario: TC18 Verify watchlist URL
+    When user opens watchlist
+    Then watchlist URL should be displayed
+
+  @watchlist
+  Scenario: TC19 Verify watchlist movie card
+    When user opens watchlist
+    Then movie card should be displayed
+
+  @watchlist
+  Scenario: TC20 Verify watchlist page title
+    When user opens watchlist
+    Then watchlist page title should be displayed

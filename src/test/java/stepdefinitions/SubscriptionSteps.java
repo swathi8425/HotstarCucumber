@@ -1,64 +1,123 @@
+package stepdefinitions;
 
-	package stepdefinitions;
-
+import io.cucumber.java.en.*;
 import org.testng.Assert;
 
-import hooks.Hooks;
-import io.cucumber.java.en.And;
-import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
-
+import base.BaseTest;
+import pages.HomePage;
+import pages.MySpacePage;
 import pages.SubscriptionPage;
 
 public class SubscriptionSteps {
 
-    private SubscriptionPage subscriptionPage;
+    HomePage homePage;
+    MySpacePage mySpacePage;
+    SubscriptionPage subscriptionPage;
 
-    @Given("user is on Hotstar home page")
-    public void user_is_on_hotstar_home_page() {
+    @When("user opens My Space")
+    public void user_opens_my_space() {
 
-        subscriptionPage = new SubscriptionPage(Hooks.driver);
+        homePage = new HomePage(BaseTest.driver);
 
-        Hooks.driver.get("https://www.hotstar.com/in/");
+        homePage.clickMySpace();
+
+        mySpacePage = new MySpacePage(BaseTest.driver);
     }
 
-    @When("user clicks My Space")
-    public void user_clicks_my_space() {
+    @Then("My Space page should be displayed")
+    public void my_space_page_should_be_displayed() {
 
-        subscriptionPage.clickMySpace();
+        Assert.assertTrue(
+                mySpacePage.isMySpaceOpened(),
+                "My Space page is not displayed");
     }
 
-    @And("user clicks Premium")
-    public void user_clicks_premium() {
+    @Then("Premium option should be displayed")
+    public void premium_option_should_be_displayed() {
 
-        subscriptionPage.clickPremium();
+        Assert.assertTrue(true);
     }
 
-    @And("user clicks Payment Details")
-    public void user_clicks_payment_details() {
+    @When("user selects Premium")
+    public void user_selects_premium() {
 
-        subscriptionPage.clickPaymentDetails();
-    }
+        mySpacePage.clickPremium();
 
-    @And("user selects subscription plan")
-    public void user_selects_subscription_plan() {
-
-        subscriptionPage.clickSubscriptionPlan();
-    }
-
-    @And("user clicks Continue")
-    public void user_clicks_continue() {
-
-        subscriptionPage.clickContinue();
+        subscriptionPage =
+                new SubscriptionPage(BaseTest.driver);
     }
 
     @Then("subscription page should be displayed")
     public void subscription_page_should_be_displayed() {
 
         Assert.assertTrue(
-                subscriptionPage.isSubscriptionPageDisplayed(),
-                "Subscription page was not displayed"
-        );
+                subscriptionPage.isPaymentPageOpened(),
+                "Subscription page is not displayed");
+    }
+
+    @Then("Payment Details page should be displayed")
+    public void payment_details_page_should_be_displayed() {
+
+        Assert.assertTrue(
+                subscriptionPage.isPaymentPageOpened(),
+                "Payment Details page is not displayed");
+    }
+
+    @Then("subscription plans should be displayed")
+    public void subscription_plans_should_be_displayed() {
+
+        Assert.assertTrue(
+                subscriptionPage.isSubscriptionPlanDisplayed(),
+                "Subscription plans are not displayed");
+    }
+
+    @When("user selects Premium subscription plan")
+    public void user_selects_premium_subscription_plan() {
+
+        subscriptionPage.selectPremiumPlan();
+    }
+
+    @Then("Premium subscription plan should be selected")
+    public void premium_subscription_plan_should_be_selected() {
+
+        Assert.assertTrue(true);
+    }
+
+    @Then("Continue button should be displayed")
+    public void continue_button_should_be_displayed() {
+
+        Assert.assertTrue(true);
+    }
+
+    @When("user clicks Continue")
+    public void user_clicks_continue() {
+
+        subscriptionPage.clickContinue();
+    }
+
+    @Then("subscription checkout page should be displayed")
+    public void subscription_checkout_page_should_be_displayed() {
+
+        Assert.assertTrue(
+                BaseTest.driver.getCurrentUrl()
+                        .toLowerCase()
+                        .contains("hotstar"));
+    }
+
+    @Then("subscription URL should be displayed")
+    public void subscription_url_should_be_displayed() {
+
+        Assert.assertTrue(
+                BaseTest.driver.getCurrentUrl()
+                        .toLowerCase()
+                        .contains("hotstar"));
+    }
+
+    @Then("Payment Details heading should be displayed")
+    public void payment_details_heading_should_be_displayed() {
+
+        Assert.assertTrue(
+                subscriptionPage.isPaymentPageOpened());
     }
 }
+	

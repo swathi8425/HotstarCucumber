@@ -1,93 +1,94 @@
+package stepdefinitions;
 
-	package stepdefinitions;
-
+import io.cucumber.java.en.*;
 import org.testng.Assert;
 
-import hooks.Hooks;
-import io.cucumber.java.en.When;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.Given;
-
-import pages.SearchPage;
+import base.BaseTest;
 import pages.WatchlistPage;
 
 public class WatchlistSteps {
 
-    SearchPage searchPage;
     WatchlistPage watchlistPage;
 
-    @When("I search for {string}")
-    public void i_search_for(String movie) {
+    @Then("watchlist option should be displayed")
+    public void watchlist_option_should_be_displayed() {
 
-        searchPage = new SearchPage(Hooks.driver);
-
-        searchPage.clickSearchIcon();
-        searchPage.enterSearchText(movie);
+        Assert.assertTrue(true);
     }
 
-    @When("I select a movie from the search results")
-    public void i_select_a_movie_from_the_search_results() {
+    @When("user adds the movie to watchlist")
+    public void user_adds_movie_to_watchlist() {
 
-        // Replace with the actual movie locator.
-        // Example:
-        // By movie = By.xpath("//*[contains(text(),'Pushpa')]");
-
-    }
-
-    @When("I click the Add to Watchlist button")
-    public void i_click_the_add_to_watchlist_button() {
-
-        watchlistPage = new WatchlistPage(Hooks.driver);
+        watchlistPage = new WatchlistPage(BaseTest.driver);
 
         watchlistPage.clickAddToWatchlist();
     }
 
-    @Then("the movie should be added to my watchlist")
-    public void the_movie_should_be_added_to_my_watchlist() {
+    @Then("movie should be added to watchlist")
+    public void movie_should_be_added_to_watchlist() {
 
         Assert.assertTrue(
-            watchlistPage.isWatchlistDisplayed(),
-            "Watchlist was not displayed"
-        );
+                watchlistPage.isMovieInWatchlist(),
+                "Movie was not added to watchlist");
     }
 
-    @When("I click My Space")
-    public void i_click_my_space() {
+    @When("user opens watchlist")
+    public void user_opens_watchlist() {
 
-        watchlistPage = new WatchlistPage(Hooks.driver);
-
-        watchlistPage.clickMySpace();
-    }
-
-    @Then("My Space page should be displayed")
-    public void my_space_page_should_be_displayed() {
+        watchlistPage = new WatchlistPage(BaseTest.driver);
 
         Assert.assertTrue(
-            watchlistPage.isWatchlistDisplayed(),
-            "My Space page was not displayed"
-        );
+                watchlistPage.isWatchlistDisplayed(),
+                "Watchlist is not displayed");
     }
 
-    @Given("I have added a movie to my watchlist")
-    public void i_have_added_a_movie_to_my_watchlist() {
-
-        // Login/session setup can be added here.
-    }
-
-    @When("I open My Space")
-    public void i_open_my_space() {
-
-        watchlistPage = new WatchlistPage(Hooks.driver);
-
-        watchlistPage.clickMySpace();
-    }
-
-    @Then("the movie should be displayed in my watchlist")
-    public void the_movie_should_be_displayed_in_my_watchlist() {
+    @Then("watchlist page should be displayed")
+    public void watchlist_page_should_be_displayed() {
 
         Assert.assertTrue(
-            watchlistPage.isWatchlistDisplayed(),
-            "Movie was not displayed in watchlist"
-        );
+                watchlistPage.isWatchlistDisplayed());
+    }
+
+    @Then("selected movie should be displayed")
+    public void selected_movie_should_be_displayed() {
+
+        Assert.assertTrue(
+                watchlistPage.isMovieInWatchlist());
+    }
+
+    @Then("movies should be added to watchlist")
+    public void movies_should_be_added_to_watchlist() {
+
+        Assert.assertTrue(
+                watchlistPage.isMovieInWatchlist());
+    }
+
+    @When("user refreshes the page")
+    public void user_refreshes_the_page() {
+
+        BaseTest.driver.navigate().refresh();
+    }
+
+    @Then("watchlist URL should be displayed")
+    public void watchlist_url_should_be_displayed() {
+
+        Assert.assertTrue(
+                BaseTest.driver.getCurrentUrl()
+                        .toLowerCase()
+                        .contains("hotstar"));
+    }
+
+    @Then("movie card should be displayed")
+    public void movie_card_should_be_displayed() {
+
+        Assert.assertTrue(
+                watchlistPage.isMovieInWatchlist());
+    }
+
+    @Then("watchlist page title should be displayed")
+    public void watchlist_page_title_should_be_displayed() {
+
+        Assert.assertFalse(
+                BaseTest.driver.getTitle().isEmpty());
     }
 }

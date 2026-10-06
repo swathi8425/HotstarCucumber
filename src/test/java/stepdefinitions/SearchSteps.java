@@ -1,54 +1,45 @@
 
-	package stepdefinitions;
+package stepdefinitions;
 
+import base.BaseTest;
+import io.cucumber.java.en.*;
 import org.testng.Assert;
 
-import hooks.Hooks;
-import io.cucumber.java.en.Given;
-import io.cucumber.java.en.When;
-import io.cucumber.java.en.Then;
-
+import pages.HomePage;
 import pages.SearchPage;
 
 public class SearchSteps {
 
+    HomePage homePage;
     SearchPage searchPage;
 
-    @Given("I am on the Hotstar home page")
-    public void i_am_on_the_hotstar_home_page() {
+    @Given("user opens Hotstar application")
+    public void user_opens_hotstar_application() {
 
-        Hooks.driver.get("https://www.hotstar.com/in");
-
-        searchPage = new SearchPage(Hooks.driver);
+        homePage = new HomePage(BaseTest.driver);
+        searchPage = new SearchPage(BaseTest.driver);
     }
 
-    @When("I click on the search icon")
-    public void i_click_on_the_search_icon() {
+    @When("user clicks search")
+    public void user_clicks_search() {
 
-        searchPage.clickSearchIcon();
+        homePage.clickSearch();
     }
 
-    @When("I enter {string} in the search box")
-    public void i_enter_in_the_search_box(String movie) {
+    @When("user searches for movie {string}")
+    public void user_searches_for_movie(String movie) {
 
-        searchPage.enterSearchText(movie);
+        searchPage.searchMovie(movie);
     }
 
     @Then("search results should be displayed")
     public void search_results_should_be_displayed() {
 
         Assert.assertTrue(
-            searchPage.isSearchResultDisplayed(),
-            "Search results were not displayed"
-        );
-    }
-
-    @Then("no relevant search result should be displayed")
-    public void no_relevant_search_result_should_be_displayed() {
-
-        Assert.assertTrue(
-            searchPage.isSearchPageDisplayed(),
-            "Search page was not displayed"
-        );
+                searchPage.isSearchResultDisplayed(),
+                "Search results are not displayed");
     }
 }
+
+
+

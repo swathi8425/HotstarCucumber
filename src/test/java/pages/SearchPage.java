@@ -5,7 +5,6 @@ import java.time.Duration;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -14,66 +13,68 @@ public class SearchPage {
     WebDriver driver;
     WebDriverWait wait;
 
-    private By searchIcon = By.xpath(
-        "//*[contains(@aria-label,'Search') " +
-        "or contains(@title,'Search')]"
-    );
-
-    private By searchBox = By.xpath(
-        "//input[@type='search' " +
-        "or contains(translate(@placeholder,'SEARCH','search'),'search')]"
-    );
-
     public SearchPage(WebDriver driver) {
-
         this.driver = driver;
-
-        wait = new WebDriverWait(
-            driver,
-            Duration.ofSeconds(20)
-        );
+        wait = new WebDriverWait(driver, Duration.ofSeconds(15));
     }
 
-    public void clickSearchIcon() {
+    private By searchInput = By.cssSelector(
+            "input[type='search'], " +
+            "input[placeholder*='Search'], " +
+            "input[aria-label*='Search']");
 
-        WebElement search = wait.until(
-            ExpectedConditions.visibilityOfElementLocated(searchIcon)
-        );
+    private By searchResult = By.cssSelector(
+            "[class*='search-result'], " +
+            "[class*='SearchResult']");
 
-        search.click();
+    private By movieCard = By.cssSelector(
+            "[class*='card'], [class*='Card']");
+
+    public boolean isSearchPageOpened() {
+
+        try {
+            wait.until(
+                ExpectedConditions.visibilityOfElementLocated(searchInput));
+
+            return true;
+
+        } catch (Exception e) {
+            return false;
+        }
     }
 
-    public void enterSearchText(String movieName) {
+    public void searchMovie(String movieName) {
 
-        WebElement search = wait.until(
-            ExpectedConditions.visibilityOfElementLocated(searchBox)
-        );
+        wait.until(
+                ExpectedConditions.visibilityOfElementLocated(searchInput))
+                .sendKeys(movieName);
 
-        search.clear();
-        search.sendKeys(movieName);
-        search.sendKeys(Keys.ENTER);
+        driver.findElement(searchInput)
+                .sendKeys(Keys.ENTER);
     }
 
     public boolean isSearchResultDisplayed() {
 
         try {
-
             return wait.until(
-                ExpectedConditions.visibilityOfElementLocated(
-                    By.xpath(
-                        "//*[contains(text(),'Pushpa')]"
-                    )
-                )
-            ).isDisplayed();
+                    ExpectedConditions.visibilityOfElementLocated(movieCard))
+                    .isDisplayed();
 
         } catch (Exception e) {
-
             return false;
         }
     }
 
-    public boolean isSearchPageDisplayed() {
+    public boolean isNoResultDisplayed() {
 
-        return driver.getCurrentUrl().contains("hotstar");
+        try {
+
+            return driver.getPageSource()
+                    .toLowerCase()
+                    .contains("no results");
+
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
